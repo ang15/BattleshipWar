@@ -1,0 +1,7 @@
+D:\task\BattleshipWar\bin\Debug\BattleshipWar.exe.config
+D:\task\BattleshipWar\bin\Debug\BattleshipWar.exe
+D:\task\BattleshipWar\bin\Debug\BattleshipWar.pdb
+D:\task\BattleshipWar\obj\Debug\BattleshipWar.csprojAssemblyReference.cache
+D:\task\BattleshipWar\obj\Debug\BattleshipWar.csproj.CoreCompileInputs.cache
+D:\task\BattleshipWar\obj\Debug\BattleshipWar.exe
+D:\task\BattleshipWar\obj\Debug\BattleshipWar.pdb
