@@ -29,54 +29,34 @@ namespace BattleshipWar
                 cells[y, x].IsNotEmtyNear = true;
             }
         }
-        public void PlaceShootAtNearX0(int x, int y)
+        public void TryPlace(int x, int y)
         {
-            if (x != 0)
+            if (IsScope(x, y))
             {
-                PlaceShootAtNear(x - 1, y);
-            }
-
-            if (x != 9)
-            {
-                PlaceShootAtNear(x + 1, y);
-            }
-
-            if (y != 9)
-            {
-                PlaceShootAtNear(x, y + 1);
-                if (x != 0)
-                {
-                    PlaceShootAtNear(x - 1, y + 1);
-                }
-
-                if (x != 9)
-                {
-                    PlaceShootAtNear(x + 1, y + 1);
-                }
-            }
-
-            if (y != 0)
-            {
-                PlaceShootAtNear(x, y - 1);
-                if (x != 0)
-                {
-                    PlaceShootAtNear(x - 1, y - 1);
-
-                }
-                if (x != 9)
-                {
-                    PlaceShootAtNear(x + 1, y - 1);
-
-                }
+                PlaceShootAtNear(x, y);
             }
         }
+
+        public void PlaceShootAtNearX0(int x, int y)
+        {
+            TryPlace(x - 1, y);
+            TryPlace(x + 1, y);
+
+            TryPlace(x, y + 1);
+            TryPlace(x - 1, y + 1);
+            TryPlace(x + 1, y + 1);
+
+            TryPlace(x, y - 1);
+            TryPlace(x + 1, y - 1);
+
+        }
+     
+        
         public void PlaceShootOne(int x, int y, ref int rezultOfParse)
         {
             if (IsNotEmtyAndIsNotEmtyNear(x, y))
             {
-                rezultOfParse = 0;
-                PlaceShootAt(x, y);
-                PlaceShootAtNearX0(x, y);
+                RezultPlaceShootAt( x,  y);
             }
         }
         public void PlaceShootTwo(int x, int y, bool vertical, ref int rezultOfParse)
@@ -97,16 +77,14 @@ namespace BattleshipWar
         }
         public void PlaceShootTwoVertical(int x, int y, ref int rezultOfParse)
         {
-            if (Scope(x, y) && Scope(x, y + 1))
+            if (IsScope(x, y) && IsScope(x, y + 1))
             {
                 if (IsNotEmtyAndIsNotEmtyNear(x, y) && IsNotEmtyAndIsNotEmtyNear(x, y + 1))
                 {
 
                     for (int i = 0; i < 2; i++)
                     {
-                        rezultOfParse = 0;
-                        PlaceShootAt(x, y);
-                        PlaceShootAtNearX0(x, y);
+                        rezultOfParse = RezultPlaceShootAt(x, y);
                         y++;
                     }
                 }
@@ -114,16 +92,14 @@ namespace BattleshipWar
         }
         public void PlaceShootThreeVertical(int x, int y, ref int rezultOfParse)
         {
-            if (Scope(x, y) && Scope(x, y + 1) && Scope(x, y + 2))
+            if (IsScope(x, y) && IsScope(x, y + 1) && IsScope(x, y + 2))
             {
                 if (IsNotEmtyAndIsNotEmtyNear(x, y) && IsNotEmtyAndIsNotEmtyNear(x, y + 1) && IsNotEmtyAndIsNotEmtyNear(x, y + 2))
                 {
 
                     for (int i = 0; i < 3; i++)
                     {
-                        rezultOfParse = 0;
-                        PlaceShootAt(x, y);
-                        PlaceShootAtNearX0(x, y);
+                        rezultOfParse = RezultPlaceShootAt(x, y);
                         y++;
                     }
                 }
@@ -131,16 +107,14 @@ namespace BattleshipWar
         }
         public void PlaceShootFourVertical(int x, int y, ref int rezultOfParse)
         {
-            if (Scope(x, y) && Scope(x, y + 1) && Scope(x, y + 2) && Scope(x, y + 3))
+            if (IsScope(x, y) && IsScope(x, y + 1) && IsScope(x, y + 2) && IsScope(x, y + 3))
             {
                 if (IsNotEmtyAndIsNotEmtyNear(x, y) && IsNotEmtyAndIsNotEmtyNear(x, y + 1) && IsNotEmtyAndIsNotEmtyNear(x, y + 2) && IsNotEmtyAndIsNotEmtyNear(x, y + 3))
                 {
 
                     for (int i = 0; i < 4; i++)
                     {
-                        rezultOfParse = 0;
-                        PlaceShootAt(x, y);
-                        PlaceShootAtNearX0(x, y);
+                        rezultOfParse = RezultPlaceShootAt(x, y);
                         y++;
                     }
                 }
@@ -148,16 +122,14 @@ namespace BattleshipWar
         }
         public void PlaceShootTwoHorizontal(int x, int y, ref int rezultOfParse)
         {
-            if (Scope(x, y) && Scope(x + 1, y))
+            if (IsScope(x, y) && IsScope(x + 1, y))
             {
                 if (IsNotEmtyAndIsNotEmtyNear(x, y) && IsNotEmtyAndIsNotEmtyNear(x, y + 1))
                 {
 
                     for (int i = 0; i < 2; i++)
                     {
-                        rezultOfParse = 0;
-                        PlaceShootAt(x, y);
-                        PlaceShootAtNearX0(x, y);
+                        rezultOfParse = RezultPlaceShootAt(x, y);
                         x++;
                     }
                 }
@@ -165,16 +137,14 @@ namespace BattleshipWar
         }
         public void PlaceShootThreeHorizontal(int x, int y, ref int rezultOfParse)
         {
-            if (Scope(x, y) && Scope(x + 1, y) && Scope(x + 2, y))
+            if (IsScope(x, y) && IsScope(x + 1, y) && IsScope(x + 2, y))
             {
                 if (IsNotEmtyAndIsNotEmtyNear(x, y) && IsNotEmtyAndIsNotEmtyNear(x, y + 1) && IsNotEmtyAndIsNotEmtyNear(x, y + 2))
                 {
 
                     for (int i = 0; i < 3; i++)
                     {
-                        rezultOfParse = 0;
-                        PlaceShootAt(x, y);
-                        PlaceShootAtNearX0(x, y);
+                        rezultOfParse = RezultPlaceShootAt(x,y);
                         x++;
                     }
                 }
@@ -182,16 +152,14 @@ namespace BattleshipWar
         }
         public void PlaceShootFourHorizontal(int x, int y, ref int rezultOfParse)
         {
-            if (Scope(x, y) && Scope(x + 1, y) && Scope(x + 2, y) && Scope(x + 3, y))
+            if (IsScope(x, y) && IsScope(x + 1, y) && IsScope(x + 2, y) && IsScope(x + 3, y))
             {
                 if (IsNotEmtyAndIsNotEmtyNear(x, y) && IsNotEmtyAndIsNotEmtyNear(x, y + 1) && IsNotEmtyAndIsNotEmtyNear(x, y + 2) && IsNotEmtyAndIsNotEmtyNear(x, y + 3))
                 {
 
                     for (int i = 0; i < 4; i++)
                     {
-                        rezultOfParse = 0;
-                        PlaceShootAt(x, y);
-                        PlaceShootAtNearX0(x, y);
+                        rezultOfParse = RezultPlaceShootAt(x, y);
                         x++;
                     }
                 }
@@ -206,13 +174,17 @@ namespace BattleshipWar
             }
             return false;
         }
-        public bool Scope(int x, int y)
+        public bool IsScope(int x, int y)
         {
-            if (x <= 9 && x >= 0 && y <= 9 && y >= 0)
-            {
-                return true;
-            }
-            return false;
+            return x <= 9 && x >= 0 && y <= 9 && y >= 0;
+          
+        }
+        public int RezultPlaceShootAt(int x, int y)
+        {
+           
+            PlaceShootAt(x, y);
+            PlaceShootAtNearX0(x, y);
+            return 0;
         }
     }
 }

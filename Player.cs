@@ -6,24 +6,64 @@ using System.Threading.Tasks;
 
 namespace BattleshipWar
 {
-
-    public class Enemy
+    public enum PlayerType
     {
-        public Field field = new Field();
+        Human,
+        AI
+    }
+
+    public class Player
+    {
         private int[] colship = new int[4] { 4, 3, 2, 1 };
+        public Field field;
+        private Field enemy;
+
+        private IController controller;
+
+        private Player(IController controller)
+        {
+            this.controller = controller;
+            field = new Field();
+        }
+
+        public static Player CreatePlayerByType(PlayerType type)
+        {
+            IController controller = null;
+            switch (type)
+            {
+                case PlayerType.Human:
+                    controller = new HumanController();
+                    break;
+                case PlayerType.AI:
+                    controller = new AIController();
+                    break;
+                default:
+                    break;
+            }
+
+            return new Player(controller);
+        }
+
+        public void SetEnemyField(Field enemy)
+            => this.enemy = enemy;
 
         public void SetField(int size)
         {
+            int sizenumber = size;
             int rezultOfParse;
             do
             {
+                Console.WriteLine("size =" + size);
                 rezultOfParse = -1;
-                int x = CheckAJ();
-                int y = Check19();
+                int x = controller.CheckAJ();
+                Console.WriteLine("size =" + size);
+                int y = controller.Check19();
+                Console.WriteLine("size =" + size);
                 if (size == 1)
                 {
-
+                    Console.WriteLine("size =" + size);
                     field.PlaceShootOne(x, y, ref rezultOfParse);
+                    Console.WriteLine("size =" + size);
                 }
                 else
                 if (size == 2)
@@ -43,58 +83,48 @@ namespace BattleshipWar
                     bool vertcal = PlaceShooWhithOutOme(x, y);
                     field.PlaceShootFour(x, y, vertcal, ref rezultOfParse);
                 }
+                if (rezultOfParse == -1)
+                {
+                    Console.Read();
+                }
             } while (rezultOfParse == -1);
+
         }
 
         public bool PlaceShooWhithOutOme(int x, int y)
         {
-             Random rnd = new Random();
-            int a = rnd.Next(1, 2);
-            if (a == 1)
-            {
-                return true;
-            }
-            return false;
-        }
-        public void SetShip()
-        {
-            int rezultOfParse;
+            int a=0 ;
+            bool finish=true;
             do
             {
-                rezultOfParse = -1;
-                Random rnd = new Random();
-                int size = rnd.Next(1, 5);
-                    int number = size - 1;
-                    if (colship[number] != 0)
-                    {
-                        rezultOfParse = 0;
-                        colship[number]--;
-                        SetField(size);
-                    }
-            } while (rezultOfParse == -1);
+                Console.WriteLine("Куда поставите корабель из 2 клеток");
+                Console.WriteLine("1.Вертикально");
+                Console.WriteLine("2.Горизонтально");
+                bool success = int.TryParse(Console.ReadLine(), out a);
+                if (success == false||( a <1 || a > 2))
+                {
+                    Console.WriteLine("Ошибка");
+                    a = 0;
+                }
+                if (a == 1)
+                {
+                    finish = true;
+                }
+                else if (a == 2)
+                {
+                    finish = false;
+                }
+            } while (a==0);
+            return finish;
         }
-        public int Check19()
+        public void SetShipField()
         {
-                Random rnd = new Random();
-                int number = rnd.Next(0, 9);
-                    return number;
-        }
-
-        public int CheckAJ()
-        {
-
-            Random rnd = new Random();
-            int number = rnd.Next(0, 9);
-
-            return number;
-        }
-        public void Field()
-        {
-            SetShip();
+          int  size=controller.SetShip(ref colship);
+            Console.WriteLine("size =" + size);
+            SetField(size);
         }
         internal void Draw(int y)
         {
-
             Console.Write(y + 1);
             if (y != 9)
             {
@@ -105,9 +135,9 @@ namespace BattleshipWar
             {
                 if (field.GetCell(x, y).IsNotEmty == true && field.GetCell(x, y).WasShootedHere == false)
                 {
-                   // Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.Write(" [ ] ");
-                   // Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write(" [0] ");
+                    Console.ResetColor();
                 }
                 else if (field.GetCell(x, y).IsNotEmty == true && field.GetCell(x, y).WasShootedHere == true)
                 {
@@ -117,10 +147,10 @@ namespace BattleshipWar
                 }
                 else if (field.GetCell(x, y).IsNotEmty == false && field.GetCell(x, y).WasShootedHere == true)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red; 
-                   Console.Write(" [x] ");
-                    Console.ResetColor(); 
-                    
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(" [x] ");
+                    Console.ResetColor();
+
                 }
                 else if (field.GetCell(x, y).IsNotEmtyNear == true)
                 {
@@ -132,11 +162,11 @@ namespace BattleshipWar
                 }
             }
         }
-        internal void Logic(Character character)
+        internal void Logic()
         {
-            Hit(character);
+            Hit();
         }
-        public void Hit(Character character)
+        public void Hit()
         {
             int rezultOfParse;
             do
@@ -144,23 +174,23 @@ namespace BattleshipWar
                 rezultOfParse = -1;
                 Console.WriteLine("Начнем бой");
                 Console.WriteLine("Куда будеш стрелять");
-                int x = CheckAJ();
-                int y = Check19();
-                if (character.field.GetCell(x, y).IsNotEmty == true)
+                int x = controller.CheckAJ();
+                int y = controller.Check19();
+                if (enemy.GetCell(x, y).IsNotEmty == true)
                 {
+
                     Console.WriteLine("Ранел");
-                    character.field.ShootAt(x, y);
+                    enemy.ShootAt(x, y);
                 }
                 else
                 {
                     rezultOfParse = 0;
                     Console.WriteLine("мимо");
-                    character.field.ShootAt(x, y);
+                    enemy.ShootAt(x, y);
                 }
+
             } while (rezultOfParse == -1);
         }
-
     }
+
 }
-
-
