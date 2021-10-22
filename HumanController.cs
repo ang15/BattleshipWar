@@ -2,7 +2,7 @@
 
 namespace BattleshipWar
 {
-    public class HumanController:IController
+    public class HumanController : IController
     {
         public int Check19()
         {
@@ -57,22 +57,16 @@ namespace BattleshipWar
             int numberSize;
             do
             {
-                numberSize= -1;
+                numberSize = -1;
                 Console.WriteLine("Раставим коробли");
                 Console.WriteLine("Какой корабль ширеной будеш ставить?");
-                int size = 1;
-                bool success = int.TryParse(Console.ReadLine(), out size);
-                Console.WriteLine("size =" + size);
-                if (success == true && size >0 && size <5 )
+                bool success = int.TryParse(Console.ReadLine(), out int size);
+                if (success == true && size >=1  && size <=4)
                 {
-                    Console.WriteLine("size =" + size);
-                    if (colship[size-1] != 0)
+                    if (colship[size - 1] != 0)
                     {
-                        Console.WriteLine("size =" + size);
                         numberSize = size;
-                        Console.WriteLine("size =" + size);
-                        colship[size-1]--;
-                        Console.WriteLine("size =" + size);
+                        colship[size - 1]--;
                     }
                 }
                 if (numberSize == -1)
@@ -82,6 +76,37 @@ namespace BattleshipWar
                 }
             } while (numberSize == -1);
             return numberSize;
+        }
+        public bool PlaceShooWhithOutOme(int x, int y)
+        {
+            int a = 0;
+            bool finish = true;
+            do
+            {
+                Console.WriteLine("Куда поставите корабель из 2 клеток");
+                Console.WriteLine("1.Вертикально");
+                Console.WriteLine("2.Горизонтально");
+                bool success = int.TryParse(Console.ReadLine(), out a);
+                if (success == false || (a < 1 || a > 2))
+                {
+                    Console.WriteLine("Ошибка");
+                    a = 0;
+                }
+                if (a == 1)
+                {
+                    finish = true;
+                }
+                else if (a == 2)
+                {
+                    finish = false;
+                }
+                if (a==0)
+                {
+                    Console.WriteLine("ошибка");
+                    Console.ReadLine();
+                }
+            } while (a == 0);
+            return finish;
         }
     }
 }

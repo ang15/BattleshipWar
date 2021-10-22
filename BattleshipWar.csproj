@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="AIController.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="File.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="HumanController.cs" />
     <Compile Include="IController.cs" />

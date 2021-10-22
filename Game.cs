@@ -11,8 +11,8 @@ namespace BattleshipWar
         public string alphavit = "ABCDIFGHIJ";
         public void Main()
         {
-            //  Character character = new Character();
-            //  Enemy enemy = new Enemy();
+            File file = new File();
+            file.CreateToFile();
 
             Player[] players = new Player[2];
             players[0] = Player.CreatePlayerByType(PlayerType.Human);
@@ -20,43 +20,76 @@ namespace BattleshipWar
 
             players[0].SetEnemyField(players[1].field);
             players[1].SetEnemyField(players[0].field);
+            players[0].name = "one";
+            players[1].name ="two" ;
             Draw(players[0], players[1]);
             
             for (int i = 0; i < 10; i++)
-            {
-                Generate(players[0], players[1]);
-                Console.Clear();
-                Draw(players[0], players[1]);
+            { Generate(players[0]);
+              Console.Clear();
+              Draw(players[1], players[0]);
+              Generate(players[1]);
+              Console.Clear();
+              Draw(players[0], players[1]);
             }
-            Logic(players);
-
-
+              Logic(players);
+             DrawFinish(players[0], players[1]);
             Console.WriteLine("Finish");
             Console.Read();
         }
 
-        private void Generate(Player character, Player enemy)
+        private void Generate(Player player)
         {
-            character.SetShipField();
-            enemy.SetShipField();
+            player.SetShipField();
         }
 
-        private void Draw(Player character, Player enemy)
+   
+        private void Draw(Player player1, Player player2)
         {
-
+            Console.Write("Играет  ");
+            Console.Write(player1.name);
+            for (int i = 0; i < alphavit.Length; i++)
+            {
+                Console.Write("  ");
+                Console.Write("  ");
+                Console.Write("  ");
+            }
+            Console.WriteLine(player2.name);
             DrawLeter();
             Console.Write(" ");
             DrawLeter();
             Console.WriteLine();
             for (int y = 0; y < 10; y++)
             {
-                character.Draw(y);
+                player1.Draw(y);
                 Console.Write(" ");
-                enemy.Draw(y);
+                player2.DrawEnemy(y);
                 Console.WriteLine();
             }
         }
-
+        private void DrawFinish(Player player1, Player player2)
+        {
+            Console.Write("Играет" + player1);
+            Console.Write(player1.name);
+            for (int i = 0; i < alphavit.Length; i++)
+            {
+                Console.Write("  ");
+                Console.Write("  ");
+                Console.Write("  ");
+            }
+            Console.WriteLine(player2.name);
+            DrawLeter();
+            Console.Write(" ");
+            DrawLeter();
+            Console.WriteLine();
+            for (int y = 0; y < 10; y++)
+            {
+                player1.Draw(y);
+                Console.Write(" ");
+                player2.Draw(y);
+                Console.WriteLine();
+            }
+        }
         private void DrawLeter()
         {
 
@@ -71,35 +104,53 @@ namespace BattleshipWar
         private void Logic(Player[] players)
         {
             int CurrentPlayerIndex = 0;
-            int rezultOfParse;
+            int rezultOfParse1 = 0;
+            int rezultOfParse2 = 0;
             do
             {
-                rezultOfParse = 0;
+                rezultOfParse1 = 0;
+                rezultOfParse2 = 0;
                 for (int x = 0; x < 10; x++)
                 {
                     for (int y = 0; y < 10; y++)
                     {
-                        if (players[0].field.GetCell(x, y).IsNotEmty || players[1].field.GetCell(x, y).IsNotEmty)
-                        {
+                        Console.WriteLine(players[0].field.GetCell(x, y).IsNotEmty);
+                        if (players[0].field.GetCell(x, y).IsNotEmty && players[0].field.GetCell(x, y).WasShootedHere==false)
+                        { 
                             if (CurrentPlayerIndex == 1)
                             {
-                                CurrentPlayerIndex = (CurrentPlayerIndex - 1) % 2;
-                                players[0].SetShipField();
+                                int rezultOfParse = 0;
+                                do
+                                {
+                                    Console.WriteLine();
+                                    players[1].Logic(ref rezultOfParse1);
+                                    Console.ReadLine();
+                                    Console.Clear();
+                                    Draw(players[1], players[0]);
+                                } while (rezultOfParse == -1);
+                                CurrentPlayerIndex = 0;
+                                rezultOfParse1 += 1;
                             }
-                            else
+                            else if (CurrentPlayerIndex == 0)
                             {
-                                CurrentPlayerIndex = (CurrentPlayerIndex - 1) % 2;
-                                players[1].SetShipField();
+                                int rezultOfParse = 0;
+                                do
+                                {
+                                    Console.WriteLine();
+                                    players[0].Logic(ref rezultOfParse1);
+                                    Console.ReadLine();
+                                    Console.Clear();
+                                    Draw(players[0], players[1]);
+                                } while (rezultOfParse == -1);
+                                CurrentPlayerIndex = 1;
+                                rezultOfParse2 += 1;
                             }
-                            Console.Clear();
-                            Draw(players[0], players[1]);
-
-                            rezultOfParse += 1;
+                            // Console.WriteLine(rezultOfParse);
                         }
                     }
                 }
-
-            } while (rezultOfParse < 10);
+            } while (rezultOfParse1 == 0 && rezultOfParse2 == 0);
         }
+
     }
 }

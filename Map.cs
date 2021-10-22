@@ -56,7 +56,9 @@ namespace BattleshipWar
         {
             if (IsNotEmtyAndIsNotEmtyNear(x, y))
             {
-                RezultPlaceShootAt( x,  y);
+                rezultOfParse = 0;
+                PlaceShootAt(x, y);
+                PlaceShootAtNearX0(x, y);
             }
         }
         public void PlaceShootTwo(int x, int y, bool vertical, ref int rezultOfParse)
